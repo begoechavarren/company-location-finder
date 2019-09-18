@@ -66,3 +66,13 @@ def create_hostelry(place, radius, coord, key):
     count = countGoogledata(place, radius, coord, key)
     print(count)
     return count
+
+
+# functions filter_meetup
+def countMeetupdata(coord, category, key):
+    url = "https://api.meetup.com/find/upcoming_events?&sign=true&photo-host=public&lon={}&topic_category={}&lat={}&key={}&sign=true".format(
+        str(coord[0]), category, str(coord[1]), key)
+    data = (requests.get(url)).json()
+    count = len([x['id'] for x in data['events']])
+    print(count)
+    return count
