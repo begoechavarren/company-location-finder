@@ -63,7 +63,7 @@ def filter_categories(companies, coord_list, min_money_raised, cat_regex):
 # https://developers.google.com/calendar/v3/pagination
 
 
-def countGoogledata(place, radius, coord, key):
+def getGoogledata(place, radius, coord, key):
     url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={},{}&radius={}&keyword={}&key={}".format(
         str(coord[1]), str(coord[0]), str(radius), place, key)
     data = [(requests.get(url)).json()]
@@ -72,10 +72,14 @@ def countGoogledata(place, radius, coord, key):
         time.sleep(2)
         new_req = (requests.get(str(new_url))).json()
         data.append(new_req)
-    total_results = 0
+    total_results = []
     for x in data:
-        total_results += len(x['results'])
+        total_results.append(x['results'])
     return total_results
+
+
+def countGoogledata(place, radius, coord, key):
+    return len(getGoogledata(place, radius, coord, key))
 
 
 def create_hostelry(place, radius, coord, key):
@@ -83,21 +87,26 @@ def create_hostelry(place, radius, coord, key):
     return count
 
 
-def filter_maps(df):
+def filter_maps(df, hostelry, services):
     load_dotenv()
     google_key = os.getenv("google_key")
     # importaba my_df
     # ojo esto hacerlo con parámetros!
     # y ojo palabras que meta el usuario que sean separadas con comas
     df['hostelry'] = df.apply(lambda x: create_hostelry(
-        "starbucks", 1500, x["coords"], google_key), axis=1)
+        hostelry, 1500, x["coords"], google_key), axis=1)
     df['services'] = df.apply(lambda x: create_hostelry(
-        "elementary school", 1500, x["coords"], google_key), axis=1)
+        services, 1500, x["coords"], google_key), axis=1)
     return df
 
 
 # functions filter_meetup
+
+
 def countMeetupdata(coord, category, key):
+    categories = {'outdoors-adventure': '242', 'tech': '292', 'parents-family': '232', 'health-wellness': '302', 'sports-fitness': '282', 'education': '562', 'photography': '262', 'food': '162', 'writing': '582', 'language': '212', 'music': '512',
+                  'movements': '552', 'lgbtq': '585', 'film': '583', 'games-sci-fi': '182', 'beliefs': '132', 'arts-culture': '122', 'book-clubs': '222', 'dancing': '542', 'pets': '252', 'hobbies-crafts': '532', 'fashion-beauty': '584', 'social': '272', 'career-business': '522'}
+    category = categories[category]
     url = "https://api.meetup.com/find/upcoming_events?&sign=true&photo-host=public&lon={}&topic_category={}&lat={}&key={}&sign=true".format(
         str(coord[0]), category, str(coord[1]), key)
     data = (requests.get(url)).json()
