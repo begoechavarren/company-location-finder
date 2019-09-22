@@ -1,4 +1,5 @@
 import pandas as pd
+import pymongo
 from pymongo import MongoClient
 import numpy as np
 import re
@@ -7,6 +8,7 @@ from functions_clean import *
 # data acquisition from pymongo
 client = MongoClient("mongodb://localhost:27017/")
 db = client.companies
+
 companies = db.companies.find()
 data_companies = pd.DataFrame(companies)
 companies = db.companies.find({"$and": [
@@ -63,5 +65,15 @@ companies['total_money_raised'] = companies.apply(lambda df: currencyconverter(d
 coord_list = coord_list_creator(companies)
 
 # export to json
-# mongoimport --db companies --collection selected --jsonArray offices.json
 companies.to_json('./offices.json', orient="records")
+
+# import to mongoDB and create 2dSphere index
+# alternative (manually from terminal): mongoimport --db companies --collection selected --jsonArray offices.json
+mycol = db["selected"]
+try:
+    mycol.drop()
+except Exception as e:
+    print("Collection does not exist.")
+
+mycol.insert_many(companies.to_dict('records'))
+mycol.create_index([('position', pymongo.GEOSPHERE)])

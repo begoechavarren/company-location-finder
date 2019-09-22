@@ -6,6 +6,10 @@ import requests
 from dotenv import load_dotenv
 import os
 from sklearn import preprocessing
+import folium
+from folium.plugins import MeasureControl
+import webbrowser
+import os
 
 
 # functions filter_categories
@@ -90,9 +94,6 @@ def create_hostelry(place, radius, coord, key):
 def filter_maps(df, hostelry, services):
     load_dotenv()
     google_key = os.getenv("google_key")
-    # importaba my_df
-    # ojo esto hacerlo con parámetros!
-    # y ojo palabras que meta el usuario que sean separadas con comas
     df['hostelry'] = df.apply(lambda x: create_hostelry(
         hostelry, 1500, x["coords"], google_key), axis=1)
     df['services'] = df.apply(lambda x: create_hostelry(
@@ -101,17 +102,24 @@ def filter_maps(df, hostelry, services):
 
 
 # functions filter_meetup
-
-
-def countMeetupdata(coord, category, key):
+def getMeetupdata(coord, category, key):
     categories = {'outdoors-adventure': '242', 'tech': '292', 'parents-family': '232', 'health-wellness': '302', 'sports-fitness': '282', 'education': '562', 'photography': '262', 'food': '162', 'writing': '582', 'language': '212', 'music': '512',
                   'movements': '552', 'lgbtq': '585', 'film': '583', 'games-sci-fi': '182', 'beliefs': '132', 'arts-culture': '122', 'book-clubs': '222', 'dancing': '542', 'pets': '252', 'hobbies-crafts': '532', 'fashion-beauty': '584', 'social': '272', 'career-business': '522'}
     category = categories[category]
     url = "https://api.meetup.com/find/upcoming_events?&sign=true&photo-host=public&lon={}&topic_category={}&lat={}&key={}&sign=true".format(
         str(coord[0]), category, str(coord[1]), key)
-    data = (requests.get(url)).json()
-    count = len([x['id'] for x in data['events']])
-    return count
+    result = ((requests.get(url)).json())['events']
+    data = []
+    for x in result:
+        try:
+            data.append([x['venue']['lat'], x['venue']['lon']])
+        except:
+            pass
+    return data
+
+
+def countMeetupdata(coord, category, key):
+    return len(getMeetupdata(coord, category, key))
 
 
 def filter_meetup(category, df):
@@ -123,7 +131,6 @@ def filter_meetup(category, df):
 
 
 # functions punctuation
-
 def normalize_df(df):
     df.set_index('coords', inplace=True)
     x = df.values  # returns a numpy array
@@ -144,3 +151,59 @@ def punctuation(df, b_near_companies, b_hostelry, b_services, b_events):
         b_services+df['events']*b_events
     final_location = df[df['punctuation'] == max(df['punctuation'])].index[0]
     return final_location
+
+# functions final df and plot
+
+
+def create_plot_df(hostelry, service, events, coord):
+    google_key = os.getenv("google_key")
+    meetup_key = os.getenv("meetup_key")
+    data_h = getGoogledata(hostelry, 1500, coord, google_key)
+    hostelry_df = pd.DataFrame({"hostelry": [
+                               [w['geometry']['location']['lat'], w['geometry']['location']['lng']] for w in [y for x in data_h for y in x]]})
+    data_s = getGoogledata(service, 1500, coord, google_key)
+    services_df = pd.DataFrame({"services": [
+                               [w['geometry']['location']['lat'], w['geometry']['location']['lng']] for w in [y for x in data_s for y in x]]})
+    companies_df = pd.DataFrame({'companies': [[x['position']['coordinates'][1], x['position']['coordinates'][0]]
+                                               for x in getCompaniesNear(coord[1], coord[0], max_meters=2000)]})
+    events_df = pd.DataFrame(
+        {"events": getMeetupdata(coord, events, meetup_key)})
+    final_df = pd.concat(
+        [hostelry_df, services_df, companies_df, events_df], axis=1, sort=False)
+    return final_df
+
+
+def create_folium(df, coords):
+    coords = [coords[1], coords[0]]
+    icons = {'hostelry': {'color': "blue", 'iconname': "fa-cutlery"}, 'services': {'color': "purple", 'iconname': "fa-asterisk"},
+             'companies': {'color': "red", 'iconname': "fa-building"}, 'events': {'color': "green", 'iconname': "fa-calendar-o"}}
+    map_folium = folium.Map(coords, width=750, height=500, zoom_start=17)
+    folium.CircleMarker(
+        coords, radius=9, fill_color="#F35C50").add_to(map_folium)
+    for e in df:
+        for coord in df[e]:
+            if coord != coords:
+                try:
+                    folium.Marker(coord, radius=9, icon=folium.Icon(
+                        color=icons[e]['color'], prefix='fa', icon=icons[e]['iconname']), fill_color="#F35C50").add_to(map_folium)
+                except:
+                    pass
+    map_folium.add_child(MeasureControl())
+    # save map as html
+    map_folium.save('./map_folium.html')
+    return map_folium
+
+
+def open_folium_browser():
+    new = 2  # open in a new tab, if possible
+    url = "file:///{}{}".format(os.getcwd(), "/map_folium.html")
+    webbrowser.open(url, new=new)
+
+
+def get_address(lat, lng):
+    google_key = os.getenv("google_key")
+    url = "https://maps.googleapis.com/maps/api/geocode/json?latlng={},{}&key={}".format(
+        lat, lng, google_key)
+    data = [(requests.get(url)).json()]
+    address = data[0]['results'][0]['formatted_address']
+    return address
