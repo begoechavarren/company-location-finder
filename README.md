@@ -3,7 +3,7 @@
 # Company location finder
 Ironhack Madrid Data Bootcamp project nº3
 
-<img style="float: left;" src="./images/world_location.jpeg" width="300">
+<img style="float: left;" src="./images/world_location.jpeg" width="500">
 
 
 ## Overview
@@ -22,23 +22,23 @@ I used MongoDB to store the data and to perform GeoJSON queries, as well as the 
 
 Finally I displayed the final location along with all the relevant nearby locations in an HTML using Folium.
 
-<img style="float: left;" src="./images/process_1.jpg" width="300">
+<img style="float: left;" src="./images/process_1.jpg" width="500">
 
-<img style="float: left;" src="./images/process_2.jpg" width="300">
+<img style="float: left;" src="./images/process_2.jpg" width="500">
 
-<img style="float: left;" src="./images/process_3.jpg" width="300">
+<img style="float: left;" src="./images/process_3.jpg" width="500">
 
-<img style="float: left;" src="./images/process_4.jpg" width="300">
+<img style="float: left;" src="./images/process_4.jpg" width="500">
 
-<img style="float: left;" src="./images/process_5.jpg" width="300">
+<img style="float: left;" src="./images/process_5.jpg" width="500">
 
-<img style="float: left;" src="./images/process_6.jpg" width="300">
+<img style="float: left;" src="./images/process_6.jpg" width="500">
 
-<img style="float: left;" src="./images/process_7.jpg" width="300">
+<img style="float: left;" src="./images/process_7.jpg" width="500">
  
-<img style="float: left;" src="./images/process_8.jpg" width="300">
+<img style="float: left;" src="./images/process_8.jpg" width="500">
  
-<img style="float: left;" src="./images/process_9.png" width="300">
+<img style="float: left;" src="./images/process_9.png" width="500">
 
 
 ---
