@@ -91,11 +91,11 @@ def display_M5():
     ''')
     print('''
     -----------------------------------------------------------------------
-    | 4.- Which of the following events would you want close to you?:     |
+    | 5.- Which of the following events would you want close to you?:     |
     -----------------------------------------------------------------------
     -----------------------------------------------------------------------
     | tech | health-wellness | sports-fitness | education | photography | 
-    | music | film | games-sci-fi |  arts-culture | fashion-beauty | 
+    | music | film | games-sci-fi | arts-culture | fashion-beauty | 
     | social | career-business |
     -----------------------------------------------------------------------
     '''
@@ -112,7 +112,7 @@ def display_M6(hostelry, service, cat_events):
     ''')
     print('''
     -----------------------------------------------------------------------
-      4.- Please rank from 1 (min) to 4 (max) the criteria to choose your 
+      6.- Please rank from 1 (min) to 4 (max) the criteria to choose your 
           perfect location, separated by commas:                                                       
              - Companies around you                                       
              - {} around you                                              
@@ -151,4 +151,4 @@ def display_M8(coords):
                YOUR PERFECT LOCATION IS : {}       
                        {}                          
     -----------------------------------------------------------------------
-    '''.format(coords, get_address(coords[1], coords[0])))
+    '''.format([coords[1], coords[0]], get_address(coords[1], coords[0])))

@@ -26,12 +26,11 @@ def main():
         my_df, ranking[0], ranking[1], ranking[2], ranking[3])
     final_df = create_plot_df(
         hostelry, services, event_category, final_location)
-    create_folium(final_df, final_location)
+    map_folium = create_folium(final_df, final_location)
+    map_folium = create_legend(map_folium, services, event_category, hostelry)
     display_M8(final_location)
-    open_folium_browser()
-    return "A tab in your browser should have opened. \n \
-        You should see an interactive map with the perfect location \n\
-            for your company and all its requirements displayed. "
+    open_folium_browser("map_folium")
+    return "A tab in your browser should have opened.\nYou should see an interactive map with the perfect location\nfor your company and all its requirements displayed. \n\n\n\n"
 
 
 if __name__ == '__main__':

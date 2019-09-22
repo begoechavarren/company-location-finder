@@ -4,6 +4,17 @@ from pymongo import MongoClient
 import numpy as np
 import re
 from functions_clean import *
+import json
+import os
+
+# import collection to pymongo
+
+# alternative (bash): mongoimport --db companies --collection companies --file companies.json
+bashCommand = 'mongoimport --db companies --collection companies --file ../input/companies.json'
+try:
+    os.system(bashCommand)
+except:
+    pass
 
 # data acquisition from pymongo
 client = MongoClient("mongodb://localhost:27017/")
@@ -61,15 +72,17 @@ converter = authRequest(
 companies['total_money_raised'] = companies.apply(lambda df: currencyconverter(df['total_money_raised'], converter),
                                                   axis=1)
 
-# create coordinates list (to use it as the coordinates for the test)
+# create coordinates list
 coord_list = coord_list_creator(companies)
 
 # export to json
-companies.to_json('./offices.json', orient="records")
+companies.to_json('../output/cleaned_companies.json', orient="records")
 
 # import to mongoDB and create 2dSphere index
-# alternative (manually from terminal): mongoimport --db companies --collection selected --jsonArray offices.json
+# alternative (bash): mongoimport --db companies --collection selected --jsonArray offices.json
+
 mycol = db["selected"]
+
 try:
     mycol.drop()
 except Exception as e:
