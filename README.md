@@ -21,24 +21,8 @@ I used MongoDB to store the data and to perform GeoJSON queries, as well as the 
 - [Meetup API](https://www.meetup.com/meetup_api/)
 
 Finally I displayed the final location along with all the relevant nearby locations in an HTML using Folium.
-
-<img style="float: left;" src="./images/process_1.jpg" width="500">
-
-<img style="float: left;" src="./images/process_2.jpg" width="500">
-
-<img style="float: left;" src="./images/process_3.jpg" width="500">
-
-<img style="float: left;" src="./images/process_4.jpg" width="500">
-
-<img style="float: left;" src="./images/process_5.jpg" width="500">
-
-<img style="float: left;" src="./images/process_6.jpg" width="500">
-
-<img style="float: left;" src="./images/process_7.jpg" width="500">
  
-<img style="float: left;" src="./images/process_8.jpg" width="500">
- 
-<img style="float: left;" src="./images/process_9.png" width="500">
+<img style="float: left;" src="./images/process_9.png" width="800">
 
 
 ---
@@ -57,9 +41,9 @@ Phase where I imported the data to MongoDB Compass and cleaned it using Pandas t
 
 ### 2 - Data processing
 
-Phase where I processed the data based on the arguments received by the user in a questionary.
+Phase where I processed the data based on the arguments received by the user in a questionnaire.
 
-1. Display the questionary to the user and receive argument information
+1. Display the questionnaire to the user and receive argument information
 2. Import the cleaned data from MongoDB compass filtering by the categories the user introduces, which are found through RegEx categorization
 3. Populate a dataset of coordinates (got from the initial JSON file) with:
     * The number of companies of the wanted categories that the coordinate has around (using geoNear function)
@@ -71,7 +55,28 @@ Phase where I processed the data based on the arguments received by the user in 
 
 Final phase, where I filter the dataset based on the level of importance given to each of the arguments by the user, find the perfect location and plot it.
 
-1. Normalize the data in each of the columns of the dataframe and asign them their level of importance to calculate the final coordinate ranking and find the best location for the company
+1. Normalize the data in each of the columns of the dataframe and assign them their level of importance to calculate the final coordinate ranking and find the best location for the company
 2. Get the address of the selected coordinates (using the Google Geocode API)
 3. Plot with Folium the final location and all its nearby selected companies, restaurants, services and events (create legend with HTML)
 4. Display the result on screen and automatically open an HTML file in the browser with the Folium interactive map
+
+
+## Annex
+
+### Questionnaire:
+
+<img style="float: left;" src="./images/process_1.jpg" width="400">
+
+<img style="float: left;" src="./images/process_2.jpg" width="400">
+
+<img style="float: left;" src="./images/process_3.jpg" width="400">
+
+<img style="float: left;" src="./images/process_4.jpg" width="400">
+
+<img style="float: left;" src="./images/process_5.jpg" width="400">
+
+<img style="float: left;" src="./images/process_6.jpg" width="400">
+
+<img style="float: left;" src="./images/process_7.jpg" width="400">
+ 
+<img style="float: left;" src="./images/process_8.jpg" width="400">
