@@ -33,7 +33,7 @@ Phase where I import the data to MongoDB Compass and clean it using Pandas to pr
 
 1. First step is to import the data from the Crunchbase JSON file to MongoDB Compass
 2. Acquire data from MongoDB using FIND queries to perform a first filter on the raw data
-3. Clean the dataset using Pandas (stack various offices in different rows, add geopoint and convert total raised currency using [Foreign exchange rates API](https://exchangeratesapi.io/))
+3. Clean the dataset using Pandas (stack various offices in different rows, add geopoint and convert total raised currency using the [Foreign exchange rates API](https://exchangeratesapi.io/))
 4. Import the cleaned data back to MongoDB Compass as a new collection
 
 ### 2 - Data processing
@@ -44,16 +44,16 @@ Phase where I process the data based on the arguments passed by the user in a qu
 2. Import the cleaned data from MongoDB compass filtering by the categories the user introduces, which are found through RegEx categorization
 3. Populate a dataset of coordinates (got from the initial JSON file) with:
     * The number of companies of the wanted categories that the coordinate has around (using geoNear function)
-    * The number of selected restaurants/cafes close to the coordinate (using Google Places API)
-    * The number of selected services close to the coordinate (using Google Places API)
-    * The number of events of the selected category happening close to the company (using Meetup API)
+    * The number of selected restaurants/cafes close to the coordinate (using [Google Places API](https://developers.google.com/places/web-service/intro))
+    * The number of selected services close to the coordinate (using [Google Places API](https://developers.google.com/places/web-service/intro))
+    * The number of events of the selected category happening close to the company (using [Meetup API](https://www.meetup.com/meetup_api/))
 
 ### 3 - Data filtering and visualization
 
 Final phase, where I filter the dataset based on the level of importance given to each of the arguments by the user, find the perfect location and plot it.
 
 1. Normalize the data in each of the columns of the dataframe and assign them their level of importance to calculate the final coordinate ranking and find the best location for the company
-2. Get the address of the selected coordinates (using the Google Geocode API)
+2. Get the address of the selected coordinates (using the [Google Geocoding API](https://developers.google.com/maps/documentation/geocoding/start))
 3. Plot with Folium the final location and all its nearby selected companies, restaurants, services and events (create legend with HTML)
 4. Display the result on screen and automatically open an HTML file in the browser with the Folium interactive map
 
