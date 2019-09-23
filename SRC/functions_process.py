@@ -88,9 +88,9 @@ def filter_maps(df, hostelry, services):
     load_dotenv()
     google_key = os.getenv("google_key")
     df['hostelry'] = df.apply(lambda x: create_hostelry(
-        hostelry, 1500, x["coords"], google_key), axis=1)
+        hostelry, 2000, x["coords"], google_key), axis=1)
     df['services'] = df.apply(lambda x: create_hostelry(
-        services, 1500, x["coords"], google_key), axis=1)
+        services, 2000, x["coords"], google_key), axis=1)
     return df
 
 

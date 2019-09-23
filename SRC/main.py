@@ -22,9 +22,7 @@ def main():
                               min_money_raised, cat_regex)
     my_df = filter_maps(my_df, hostelry, services)
     my_df = filter_meetup(event_category, my_df)
-    print(my_df)
     n_df = normalize_df(my_df)
-    print(n_df)
     final_location = punctuation(
         n_df, my_df, ranking[0], ranking[1], ranking[2], ranking[3])
     final_df = create_plot_df(

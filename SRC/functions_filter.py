@@ -40,10 +40,10 @@ def punctuation(n_df, df, b_near_companies, b_hostelry, b_services, b_events):
 def create_plot_df(hostelry, service, events, coord):
     google_key = os.getenv("google_key")
     meetup_key = os.getenv("meetup_key")
-    data_h = getGoogledata(hostelry, "1500", coord, google_key)
+    data_h = getGoogledata(hostelry, "2000", coord, google_key)
     hostelry_df = pd.DataFrame({"hostelry": [
                                [x['geometry']['location']['lat'], x['geometry']['location']['lng']] for x in data_h]})
-    data_s = getGoogledata(service, "1500", coord, google_key)
+    data_s = getGoogledata(service, "2000", coord, google_key)
     services_df = pd.DataFrame({"services": [
                                [x['geometry']['location']['lat'], x['geometry']['location']['lng']] for x in data_s]})
     companies_df = pd.DataFrame({'companies': [[x['position']['coordinates'][1], x['position']['coordinates'][0]]
