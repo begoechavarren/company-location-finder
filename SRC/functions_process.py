@@ -70,7 +70,8 @@ def getGoogledata(place, radius, coord, key):
         data.append(new_req)
     total_results = []
     for x in data:
-        total_results.append(x['results'])
+        for y in x['results']:
+            total_results.append(y)
     return total_results
 
 

@@ -20,14 +20,14 @@ def normalize_df(df):
     x_scaled = min_max_scaler.fit_transform(x)
     new_df = pd.DataFrame(x_scaled)
     new_df.columns = ["near_companies", "hostelry", "services", "events"]
-    df['near_companies'] = list(df['near_companies'])
-    df['hostelry'] = list(df['hostelry'])
-    df['services'] = list(df['services'])
-    df['events'] = list(df['events'])
-    return df
+    return new_df
 
 
-def punctuation(df, b_near_companies, b_hostelry, b_services, b_events):
+def punctuation(n_df, df, b_near_companies, b_hostelry, b_services, b_events):
+    df['near_companies'] = list(n_df['near_companies'])
+    df['hostelry'] = list(n_df['hostelry'])
+    df['services'] = list(n_df['services'])
+    df['events'] = list(n_df['events'])
     df['punctuation'] = df['near_companies']*b_near_companies + \
         df['hostelry']*b_hostelry+df['services'] * \
         b_services+df['events']*b_events
@@ -40,12 +40,12 @@ def punctuation(df, b_near_companies, b_hostelry, b_services, b_events):
 def create_plot_df(hostelry, service, events, coord):
     google_key = os.getenv("google_key")
     meetup_key = os.getenv("meetup_key")
-    data_h = getGoogledata(hostelry, 1500, coord, google_key)
+    data_h = getGoogledata(hostelry, "1500", coord, google_key)
     hostelry_df = pd.DataFrame({"hostelry": [
-                               [w['geometry']['location']['lat'], w['geometry']['location']['lng']] for w in [y for x in data_h for y in x]]})
-    data_s = getGoogledata(service, 1500, coord, google_key)
+                               [x['geometry']['location']['lat'], x['geometry']['location']['lng']] for x in data_h]})
+    data_s = getGoogledata(service, "1500", coord, google_key)
     services_df = pd.DataFrame({"services": [
-                               [w['geometry']['location']['lat'], w['geometry']['location']['lng']] for w in [y for x in data_s for y in x]]})
+                               [x['geometry']['location']['lat'], x['geometry']['location']['lng']] for x in data_s]})
     companies_df = pd.DataFrame({'companies': [[x['position']['coordinates'][1], x['position']['coordinates'][0]]
                                                for x in getCompaniesNear(coord[1], coord[0], max_meters=2000)]})
     events_df = pd.DataFrame(
